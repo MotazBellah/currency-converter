@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, f
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import *
+from wtform_fields import *
 
 
 app = Flask(__name__)
@@ -14,9 +15,23 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    # Currency Convert Form
+    conv_form = CurrencyCovert()
+    # convert if the validation success
+    if conv_form.validate_on_submit():
+        src_currency = conv_form.src_currency.data
+        dest_currency = conv_form.dest_currency.data
+        amount = conv_form.amount.data
+        date = conv_form.date.data
+        return redirect(url_for('convert'))
+
+    return render_template('index.html', form=conv_form)
+
+@app.route('/convert')
+def convert():
+    return 'hi'
 
 
 if __name__ == '__main__':

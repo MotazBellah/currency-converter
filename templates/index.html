@@ -7,7 +7,7 @@
     </head>
     <body>
         <div>
-            <form action="#" method="POST">
+            <form action="{{ url_for('index') }}" method="POST">
 
                 {{ displayField(form.src_currency, 'Source Currency') }}
                 {{ displayField(form.dest_currency, 'Destination Currency') }}
