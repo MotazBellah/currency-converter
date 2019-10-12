@@ -1,10 +1,29 @@
 <!DOCTYPE html>
+{% from 'form_display.html' import displayField %}
 <html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
         <title></title>
     </head>
     <body>
+        <div>
+            <form action="#" method="POST">
+
+                {{ displayField(form.src_currency, 'Source Currency') }}
+                {{ displayField(form.dest_currency, 'Destination Currency') }}
+                {{ displayField(form.amount, 'Amount') }}
+                {{ displayField(form.date, 'Reference Date') }}
+
+                <div>
+                    <input type="submit" value="Convert">
+                </div>
+
+
+                {{ form.csrf_token }}
+
+            </form>
+
+        </div>
 
     </body>
 </html>
