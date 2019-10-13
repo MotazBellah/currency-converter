@@ -32,8 +32,32 @@ class AppTestCase(unittest.TestCase):
         data = json.loads(response.get_data(as_text=True))
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(bool(data), True)
         self.assertEqual(data['currency'], "EUR")
         self.assertEqual(data['amount'], 10)
+
+    def test_convert_date(self):
+        url_data = ['EUR', 'JPY', 80, '2018-10-11']
+        response = self.client.get("/convert?src_currency={}&dest_currency={}&amount={}&date={}".format(*url_data))
+        data = json.loads(response.get_data(as_text=True))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(bool(data), False)
+
+    def test_covert_form(self):
+        response = self.client.post(
+            '/', data={
+                'src_currency': 'EUR',
+                'dest_currency': 'EUR',
+                'amount': 10,
+                'date': '2019-10-11'
+            }, follow_redirects=True)
+
+        data = json.loads(response.get_data(as_text=True))
+        self.assertEqual(bool(data), True)
+        self.assertEqual(data['currency'], "EUR")
+        self.assertEqual(data['amount'], 10)
+
 
 if __name__ == '__main__':
     unittest.main()

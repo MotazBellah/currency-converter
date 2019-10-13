@@ -41,16 +41,18 @@ def convert():
     if dest_currency.lower() == src_currency.lower():
         data['amount'] = amount
         data['currency'] = dest_currency.upper()
-        
+
     elif src_currency.lower() == 'eur':
         rate = CurrencyRate.query.filter_by(currency=dest_currency).filter_by(time=date).first()
-        data['amount'] = rate.rate * amount
-        data['currency'] = dest_currency.upper()
+        if rate:
+            data['amount'] = rate.rate * amount
+            data['currency'] = dest_currency.upper()
 
     elif dest_currency.lower() == 'eur':
         rate = CurrencyRate.query.filter_by(currency=src_currency).filter_by(time=date).first()
-        data['amount'] = (1 / rate.rate) * amount
-        data['currency'] = dest_currency.upper()
+        if rate:
+            data['amount'] = (1 / rate.rate) * amount
+            data['currency'] = dest_currency.upper()
 
     elif dest_currency.lower() == src_currency.lower():
         data['amount'] = amount
@@ -59,9 +61,10 @@ def convert():
     else:
         des_rate = CurrencyRate.query.filter_by(currency=dest_currency).filter_by(time=date).first()
         src_rate = CurrencyRate.query.filter_by(currency=src_currency).filter_by(time=date).first()
-        rate = des_rate.rate / src_rate.rate
-        data['amount'] = rate * amount
-        data['currency'] = dest_currency.upper()
+        if des_rate and src_rate:
+            rate = des_rate.rate / src_rate.rate
+            data['amount'] = rate * amount
+            data['currency'] = dest_currency.upper()
 
     return jsonify(data)
 
