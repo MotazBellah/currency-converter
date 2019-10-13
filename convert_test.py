@@ -27,10 +27,13 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_convert(self):
-        response = self.app.get("/dummy")
+        url_data = ['EUR', 'EUR', 10, '2019-10-11']
+        response = self.client.get("/convert?src_currency={}&dest_currency={}&amount={}&date={}".format(*url_data))
         data = json.loads(response.get_data(as_text=True))
 
-        self.assertEqual(data['dummy'], "dummy-value")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['currency'], "EUR")
+        self.assertEqual(data['amount'], 10)
 
 if __name__ == '__main__':
     unittest.main()
