@@ -1,6 +1,6 @@
 {% macro displayField(fieldName, placeholderValue) %}
 
-    <div>
+    <span>
         {{ fieldName(class_='form-control', placeholder=placeholderValue, **kwargs)}}
 
         <!-- Error messages -->
@@ -9,6 +9,6 @@
                 <li><sub>{{ error }}</sub></li>
             {% endfor %}
         </ul>
-    </div>
+    </span>
 
 {% endmacro %}
