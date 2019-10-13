@@ -16,12 +16,11 @@ CURRENCY_TYPE = [("EUR","EUR"),("USD","USD"),("JPY","JPY"),("BGN","BGN"),("CZK",
 def date_validate(form, field):
     date_text = field.data
     date_object = CurrencyRate.query.filter_by(time=date_text).first()
-    if date_object:
-        try:
-            time = datetime.datetime.strptime(date_text, '%Y-%m-%d')
-        except ValueError:
-            raise ValidationError("Incorrect date format, should be YYYY-MM-DD")
-    else:
+    try:
+        time = datetime.datetime.strptime(date_text, '%Y-%m-%d')
+    except ValueError:
+        raise ValidationError("Incorrect date format, should be YYYY-MM-DD")
+    if not date_object:
         raise ValidationError("Incorrect date, Please select another reference date")
 
 class CurrencyCovert(FlaskForm):

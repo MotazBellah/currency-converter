@@ -29,28 +29,65 @@ def index():
 
     return render_template('index.html', form=conv_form)
 
-@app.route('/convert/<src_currency>/<dest_currency>/<float:amount>/<date>')
-def convert(src_currency, dest_currency, amount, date):
+
+@app.route('/convert')
+def convert():
+    src_currency = request.args.get('src_currency')
+    dest_currency = request.args.get('dest_currency')
+    amount = float(request.args.get('amount'))
+    date = request.args.get('date')
+    # print(amount)
     data = {}
-    if src_currency.lower() == 'eur':
-        rate = CurrencyRate.query.filter_by(currency=dest_currency.upper()).filter_by(time=date).first()
+    if dest_currency.lower() == src_currency.lower():
+        data['amount'] = amount
+        data['currency'] = dest_currency.upper()
+        
+    elif src_currency.lower() == 'eur':
+        rate = CurrencyRate.query.filter_by(currency=dest_currency).filter_by(time=date).first()
         data['amount'] = rate.rate * amount
         data['currency'] = dest_currency.upper()
-        print(rate.rate)
+
     elif dest_currency.lower() == 'eur':
-        rate = CurrencyRate.query.filter_by(currency=src_currency.upper()).filter_by(time=date).first()
+        rate = CurrencyRate.query.filter_by(currency=src_currency).filter_by(time=date).first()
         data['amount'] = (1 / rate.rate) * amount
         data['currency'] = dest_currency.upper()
+
+    elif dest_currency.lower() == src_currency.lower():
+        data['amount'] = amount
+        data['currency'] = dest_currency.upper()
+
     else:
-        des_rate = CurrencyRate.query.filter_by(currency=dest_currency.upper()).filter_by(time=date).first()
-        src_rate = CurrencyRate.query.filter_by(currency=src_currency.upper()).filter_by(time=date).first()
+        des_rate = CurrencyRate.query.filter_by(currency=dest_currency).filter_by(time=date).first()
+        src_rate = CurrencyRate.query.filter_by(currency=src_currency).filter_by(time=date).first()
         rate = des_rate.rate / src_rate.rate
         data['amount'] = rate * amount
         data['currency'] = dest_currency.upper()
 
-
-    # sorc_curr = CurrencyRate.query.filter_by(currency=src_currency)
     return jsonify(data)
+
+
+# @app.route('/convert/<src_currency>/<dest_currency>/<float:amount>/<date>')
+# def convert(src_currency, dest_currency, amount, date):
+#     data = {}
+#     if src_currency.lower() == 'eur':
+#         rate = CurrencyRate.query.filter_by(currency=dest_currency.upper()).filter_by(time=date).first()
+#         data['amount'] = rate.rate * amount
+#         data['currency'] = dest_currency.upper()
+#         print(rate.rate)
+#     elif dest_currency.lower() == 'eur':
+#         rate = CurrencyRate.query.filter_by(currency=src_currency.upper()).filter_by(time=date).first()
+#         data['amount'] = (1 / rate.rate) * amount
+#         data['currency'] = dest_currency.upper()
+#     else:
+#         des_rate = CurrencyRate.query.filter_by(currency=dest_currency.upper()).filter_by(time=date).first()
+#         src_rate = CurrencyRate.query.filter_by(currency=src_currency.upper()).filter_by(time=date).first()
+#         rate = des_rate.rate / src_rate.rate
+#         data['amount'] = rate * amount
+#         data['currency'] = dest_currency.upper()
+#
+#
+#     # sorc_curr = CurrencyRate.query.filter_by(currency=src_currency)
+#     return jsonify(data)
 
 
 if __name__ == '__main__':
