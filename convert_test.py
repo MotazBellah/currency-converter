@@ -44,6 +44,44 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(bool(data), False)
 
+    def test_convert_format(self):
+        url_data = ['EUR', 'EUR', 10, '11-10-2019']
+        response = self.client.get("/convert?src_currency={}&dest_currency={}&amount={}&date={}".format(*url_data))
+        data = json.loads(response.get_data(as_text=True))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(bool(data), False)
+    #
+    def test_convert_curr(self):
+        url_data = ['AUD', 'RON', 1, '2019-07-15']
+        response = self.client.get("/convert?src_currency={}&dest_currency={}&amount={}&date={}".format(*url_data))
+        data = json.loads(response.get_data(as_text=True))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(bool(data), True)
+        self.assertEqual(data['currency'], "RON")
+        self.assertEqual(data['amount'], 2.9541)
+
+    def test_convert_curr2(self):
+        url_data = ['BGN', 'NOK', 1, '2019-09-17']
+        response = self.client.get("/convert?src_currency={}&dest_currency={}&amount={}&date={}".format(*url_data))
+        data = json.loads(response.get_data(as_text=True))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(bool(data), True)
+        self.assertEqual(data['currency'], "NOK")
+        self.assertEqual(data['amount'], 5.0473)
+
+    def test_convert_curr3(self):
+        url_data = ['BGN', 'NOK', 894368950, '2019-09-17']
+        response = self.client.get("/convert?src_currency={}&dest_currency={}&amount={}&date={}".format(*url_data))
+        data = json.loads(response.get_data(as_text=True))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(bool(data), True)
+        self.assertEqual(data['currency'], "NOK")
+        self.assertEqual(data['amount'], 4514148401.335)
+
     def test_covert_form(self):
         response = self.client.post(
             '/', data={
