@@ -76,31 +76,7 @@ def convert():
     return jsonify(data)
 
 
-# @app.route('/convert/<src_currency>/<dest_currency>/<float:amount>/<date>')
-# def convert(src_currency, dest_currency, amount, date):
-#     data = {}
-#     if src_currency.lower() == 'eur':
-#         rate = CurrencyRate.query.filter_by(currency=dest_currency.upper()).filter_by(time=date).first()
-#         data['amount'] = rate.rate * amount
-#         data['currency'] = dest_currency.upper()
-#         print(rate.rate)
-#     elif dest_currency.lower() == 'eur':
-#         rate = CurrencyRate.query.filter_by(currency=src_currency.upper()).filter_by(time=date).first()
-#         data['amount'] = (1 / rate.rate) * amount
-#         data['currency'] = dest_currency.upper()
-#     else:
-#         des_rate = CurrencyRate.query.filter_by(currency=dest_currency.upper()).filter_by(time=date).first()
-#         src_rate = CurrencyRate.query.filter_by(currency=src_currency.upper()).filter_by(time=date).first()
-#         rate = des_rate.rate / src_rate.rate
-#         data['amount'] = rate * amount
-#         data['currency'] = dest_currency.upper()
-#
-#
-#     # sorc_curr = CurrencyRate.query.filter_by(currency=src_currency)
-#     return jsonify(data)
-
-
 if __name__ == '__main__':
-    PORT = int(os.environ.get('PORT', 8000))
+    PORT = int(os.environ.get('PORT', 7000))
     app.debug = True
     app.run(host='0.0.0.0', port=PORT)

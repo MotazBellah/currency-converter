@@ -1,5 +1,5 @@
 import bs4 as bs
-from urllib2 import urlopen
+from urllib.request import urlopen
 from flask import Flask
 from models import *
 
