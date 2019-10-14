@@ -96,6 +96,36 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(data['currency'], "EUR")
         self.assertEqual(data['amount'], 10)
 
+    def test_covert_date_format(self):
+        response = self.client.post(
+            '/', data={
+                'src_currency': 'EUR',
+                'dest_currency': 'USD',
+                'amount': 89,
+                'date': '11-10-2019'
+            }, follow_redirects=True)
+        self.assertIn(b"Incorrect date format, should be YYYY-MM-DD", response.data)
+
+    def test_covert_date_not_exsit(self):
+        response = self.client.post(
+            '/', data={
+                'src_currency': 'EUR',
+                'dest_currency': 'USD',
+                'amount': 89,
+                'date': '2019-11-11'
+            }, follow_redirects=True)
+        self.assertIn(b"Incorrect date, Please select another reference date", response.data)
+
+    def test_covert_amount(self):
+        response = self.client.post(
+            '/', data={
+                'src_currency': 'EUR',
+                'dest_currency': 'USD',
+                'amount': 'test',
+                'date': '2019-10-11'
+            }, follow_redirects=True)
+        self.assertIn(b"Not a valid float value", response.data)
+
 
 if __name__ == '__main__':
     unittest.main()

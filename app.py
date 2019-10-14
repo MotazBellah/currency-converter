@@ -1,4 +1,5 @@
 import os
+import datetime
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -38,6 +39,11 @@ def convert():
     date = request.args.get('date')
     # print(amount)
     data = {}
+    try:
+        time = datetime.datetime.strptime(date, '%Y-%m-%d')
+    except ValueError:
+        return jsonify(data)
+
     if dest_currency.lower() == src_currency.lower():
         data['amount'] = round(amount, 4)
         data['currency'] = dest_currency.upper()
