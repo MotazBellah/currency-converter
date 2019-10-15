@@ -29,14 +29,32 @@ App URL on Heroku https://converter-currency.herokuapp.com/
 
 - models.py: Contain the class representation for DB table.
 
-- create.py: File to build to DB tables
+- create.py: File to build to DB tables and scrap the xml file to get the data and load it to DB
 
 - app.py: application file
 
-- wtform_fields: Contain wtforms class for each forms and validator
+- wtform_fields: Contain wtforms class for the form and validator
 
-- Procfile: To  declare the process type, in this app the type is "web" and Identify thread operation
+- Procfile: (For Heroku) To  declare the process type, in this app the type is "web" and Identify thread operation
+
+- Dockerfile: contains all the commands a user could call on the command line to assemble an docker image
 
 - convert_test.py: contain tests
 
 - requirements.txt: Contain a list of items to be installed, use the command to install all of items `pip install -r requirements.txt`
+
+## Run
+
+### Dockerize the App
+
+- To build the image from Dockerfile run on project directory run `$ docker build -t currency-converter:latest . `
+
+- To Run the container run `$ docker run -d -p 7000:7000 currency-converter`
+
+### Create DB
+
+- run `python create.py`
+
+- run `python app.py`
+
+- go to localhost:7000
