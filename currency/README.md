@@ -58,3 +58,7 @@ App URL on Heroku https://converter-currency.herokuapp.com/
 - run `python app.py`
 
 - go to localhost:7000
+
+### Run the tests
+
+- run `python convert_test.py`

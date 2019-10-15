@@ -26,7 +26,9 @@ class AppTestCase(unittest.TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
 
+    # test the convert action
     def test_convert(self):
+        # 1st index is the src then dest then amount then date
         url_data = ['EUR', 'EUR', 10, '2019-10-11']
         response = self.client.get("/convert?src_currency={}&dest_currency={}&amount={}&date={}".format(*url_data))
         data = json.loads(response.get_data(as_text=True))
