@@ -114,7 +114,7 @@ class AppTestCase(unittest.TestCase):
                 'amount': 89,
                 'date': '2019-11-11'
             }, follow_redirects=True)
-        self.assertIn(b"Incorrect date, Please select another reference date", response.data)
+        self.assertIn(b"Incorrect date", response.data)
 
     def test_covert_amount(self):
         response = self.client.post(
